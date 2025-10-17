@@ -1,6 +1,5 @@
 
 function actualizarCronometro() {
-
     if (segundos < 59) {
         segundos++
     } else {
@@ -16,7 +15,6 @@ function actualizarCronometro() {
     horas = String(horas).padStart(2, '0');
     minutos = String(minutos).padStart(2, '0');
     segundos = String(segundos).padStart(2, '0');
-    console.log('hora: ' + horas + '  minutos: ' + minutos + '  segundos: ' + segundos)
     cronometro.textContent = horas + ':' + minutos + ':' + segundos
 }
 
@@ -24,9 +22,7 @@ function actualizarCronometro() {
 // **** DOM Y LOGICA
 //variables
 let intervalo = null
-// let tiempoInicial = 0
-// let tiempoTranscurrido = 0
-let corriendo = false
+let corriendo = false // bandera para continuar con el cronometro o volver a 0
 let horas = 0
 let minutos = 0
 let segundos = 0
@@ -39,42 +35,31 @@ const btnPausar = document.querySelector('.btn-danger')
 const btnReiniciar = document.querySelector('.btn-warning')
 
 btnIniciar.addEventListener('click', () => {
-    if (!corriendo) {
+    if (!corriendo && horas === 0 && minutos === 0 && segundos === 0) {
         corriendo = true
         horas = 0
         minutos = 0
         segundos = 0
-
-        intervalo = setInterval(actualizarCronometro, 1000)
-        btnIniciar.disabled = true;
-        btnPausar.disabled = false;
-        btnReiniciar.disabled = false;
     }
+    btnPausar.disabled = false
+    btnReiniciar.disabled = false
+
+    intervalo = setInterval(actualizarCronometro, 1000)
 })
 
 btnPausar.addEventListener('click', () => {
-     if (corriendo) {
-        corriendo = false;
-        clearInterval(intervalo);
-        btnIniciar.disabled = false;
-        btnPausar.disabled = true;
-      }
+
+    clearInterval(intervalo);
+    corriendo = true
+
 })
 
 
 btnReiniciar.addEventListener('click', () => {
 
-    corriendo = false
-    clearInterval(intervalo)
-
+    clearInterval(intervalo);
     horas = 0
     minutos = 0
     segundos = 0
-    cronometro.textContent = '00:00:00'
     intervalo = setInterval(actualizarCronometro, 1000)
-    btnIniciar.disabled = false;
-    btnPausar.disabled = false;
-    btnReiniciar.disabled = true;
-
-
 })
